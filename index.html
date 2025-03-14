@@ -14,8 +14,6 @@
 <body>
     <h1>Kryptera & Dekryptera Text</h1>
     
-    <input type="password" id="password" placeholder="Ange lösenord"><br>
-    
     <textarea id="inputText" placeholder="Skriv ditt meddelande här..."></textarea><br>
     
     <button onclick="encryptText()">Kryptera</button>
@@ -27,8 +25,6 @@
     <p class="output" id="outputText"></p>
 
     <script>
-        const masterPassword = "hemligt123"; // Ändra lösenordet om du vill
-       
         function scramble(text) {
             let indices = [...text].map((_, i) => i);
             indices.sort(() => Math.random() - 0.5);
@@ -45,13 +41,6 @@
 
         function encryptText() {
             let input = document.getElementById("inputText").value;
-            let password = document.getElementById("password").value;
-
-            if (password !== masterPassword) {
-                alert("Fel lösenord!");
-                return;
-            }
-
             let { scrambled, key } = scramble(input);
             document.getElementById("outputText").innerText = `Krypterat: ${scrambled}`;
             document.getElementById("keyText").value = JSON.stringify(key);
@@ -59,13 +48,7 @@
 
         function decryptText() {
             let input = document.getElementById("inputText").value;
-            let password = document.getElementById("password").value;
             let keyInput = document.getElementById("keyText").value;
-
-            if (password !== masterPassword) {
-                alert("Fel lösenord!");
-                return;
-            }
 
             try {
                 let key = JSON.parse(keyInput);
