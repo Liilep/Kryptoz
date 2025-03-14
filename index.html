@@ -3,25 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kryptera & Dekryptera Text</title>
+    <title>Matrix Kryptering</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-        
+
         body {
+            font-family: 'Share Tech Mono', monospace;
             background-color: black;
             color: #00ff00;
-            font-family: 'Share Tech Mono', monospace;
             text-align: center;
             padding: 20px;
+        }
+
+        h1 {
+            font-size: 2em;
+            text-shadow: 0 0 10px #00ff00;
         }
 
         textarea, input {
             width: 80%;
             margin: 10px 0;
             padding: 10px;
-            background: black;
-            color: #00ff00;
+            background-color: black;
             border: 1px solid #00ff00;
+            color: #00ff00;
             font-family: 'Share Tech Mono', monospace;
         }
 
@@ -29,16 +34,17 @@
             padding: 10px 20px;
             margin: 10px;
             cursor: pointer;
-            background: black;
-            color: #00ff00;
+            background-color: black;
             border: 1px solid #00ff00;
+            color: #00ff00;
             font-family: 'Share Tech Mono', monospace;
             transition: 0.3s;
         }
 
         button:hover {
-            background: #00ff00;
+            background-color: #00ff00;
             color: black;
+            font-weight: bold;
         }
 
         .output {
@@ -46,25 +52,24 @@
             margin-top: 10px;
             white-space: pre-wrap;
             font-size: 1.2em;
+            text-shadow: 0 0 10px #00ff00;
         }
 
-        h1, h3 {
-            text-shadow: 0 0 5px #00ff00;
-        }
-
-        @keyframes hacker-glow {
-            0% { text-shadow: 0 0 5px #00ff00; }
-            50% { text-shadow: 0 0 15px #00ff00; }
-            100% { text-shadow: 0 0 5px #00ff00; }
-        }
-
-        .hacker-text {
-            animation: hacker-glow 1.5s infinite alternate;
+        .matrix-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: -1;
+            overflow: hidden;
         }
     </style>
 </head>
 <body>
-    <h1 class="hacker-text">💻 KRYPTEX: Kryptera & Dekryptera Text 💻</h1>
+
+    <h1>🟢 MATRIX KRYPTONET 🔥</h1>
     
     <textarea id="inputText" placeholder="Skriv ditt meddelande här..."></textarea><br>
     
@@ -72,10 +77,14 @@
     <button onclick="decryptText()">Dekryptera</button>
     <button onclick="copyToClipboard()">📋 Kopiera krypterat meddelande & kod</button>
     
-    <h3 class="hacker-text">🔑 Krypterad Nyckel:</h3>
-    <textarea id="keyText" placeholder="Klistra in nyckeln här..."></textarea>
+    <h3>Krypterad Nyckel:</h3>
+    <textarea id="keyText" placeholder="Här visas nyckeln..."></textarea>
     
     <p class="output" id="outputText"></p>
+
+    <div class="matrix-animation">
+        <canvas id="matrixCanvas"></canvas>
+    </div>
 
     <script>
         function scramble(text) {
@@ -95,10 +104,9 @@
         function encryptText() {
             let input = document.getElementById("inputText").value.trim();
             if (!input) {
-                alert("Skriv in en text att kryptera!");
+                alert("Fyll i en text att kryptera!");
                 return;
             }
-
             let { scrambled, key } = scramble(input);
             document.getElementById("outputText").innerText = `🔒 Krypterat: ${scrambled}`;
             document.getElementById("keyText").value = JSON.stringify(key);
@@ -125,20 +133,46 @@
         function copyToClipboard() {
             let encryptedMessage = document.getElementById("outputText").innerText.replace("🔒 Krypterat: ", "").trim();
             let key = document.getElementById("keyText").value.trim();
-
             if (!encryptedMessage || !key) {
                 alert("Det finns inget krypterat meddelande att kopiera!");
                 return;
             }
-
             let combinedText = `Krypterat meddelande: ${encryptedMessage}\nKrypteringsnyckel: ${key}`;
-
             navigator.clipboard.writeText(combinedText).then(() => {
                 alert("Krypterat meddelande och kod kopierades!");
             }).catch(err => {
                 alert("Kunde inte kopiera. Försök igen!");
             });
         }
+
+        const canvas = document.getElementById("matrixCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrixRain() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#00ff00";
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters[Math.floor(Math.random() * characters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrixRain, 50);
     </script>
 </body>
 </html>
