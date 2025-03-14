@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kryptera & Dekryptera Text</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        textarea, input { width: 80%; margin: 10px 0; padding: 10px; }
+        button { padding: 10px 20px; margin: 10px; cursor: pointer; }
+        .output { font-weight: bold; margin-top: 10px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>Kryptera & Dekryptera Text</h1>
+    
+    <input type="password" id="password" placeholder="Ange lösenord"><br>
+    
+    <textarea id="inputText" placeholder="Skriv ditt meddelande här..."></textarea><br>
+    
+    <button onclick="encryptText()">Kryptera</button>
+    <button onclick="decryptText()">Dekryptera</button>
+    
+    <h3>Krypterad Nyckel:</h3>
+    <textarea id="keyText" placeholder="Här visas nyckeln..." readonly></textarea>
+    
+    <p class="output" id="outputText"></p>
+
+    <script>
+        const masterPassword = "hemligt123"; // Ändra lösenordet om du vill
+       
+        function scramble(text) {
+            let indices = [...text].map((_, i) => i);
+            indices.sort(() => Math.random() - 0.5);
+            return { scrambled: indices.map(i => text[i]).join(''), key: indices };
+        }
+
+        function unscramble(text, key) {
+            let original = new Array(text.length);
+            key.forEach((originalIndex, scrambledIndex) => {
+                original[originalIndex] = text[scrambledIndex];
+            });
+            return original.join('');
+        }
+
+        function encryptText() {
+            let input = document.getElementById("inputText").value;
+            let password = document.getElementById("password").value;
+
+            if (password !== masterPassword) {
+                alert("Fel lösenord!");
+                return;
+            }
+
+            let { scrambled, key } = scramble(input);
+            document.getElementById("outputText").innerText = `Krypterat: ${scrambled}`;
+            document.getElementById("keyText").value = JSON.stringify(key);
+        }
+
+        function decryptText() {
+            let input = document.getElementById("inputText").value;
+            let password = document.getElementById("password").value;
+            let keyInput = document.getElementById("keyText").value;
+
+            if (password !== masterPassword) {
+                alert("Fel lösenord!");
+                return;
+            }
+
+            try {
+                let key = JSON.parse(keyInput);
+                let decrypted = unscramble(input, key);
+                document.getElementById("outputText").innerText = `Dekrypterat: ${decrypted}`;
+            } catch (e) {
+                document.getElementById("outputText").innerText = "Felaktig nyckel eller krypterad text.";
+            }
+        }
+    </script>
+</body>
+</html>
