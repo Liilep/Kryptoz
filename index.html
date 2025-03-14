@@ -3,16 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kryptera & Dekryptera Text</title>
+    <title>Matrix Kryptering</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        textarea, input { width: 80%; margin: 10px 0; padding: 10px; }
-        button { padding: 10px 20px; margin: 10px; cursor: pointer; }
-        .output { font-weight: bold; margin-top: 10px; white-space: pre-wrap; }
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background-color: black;
+            color: #00ff00;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2em;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        textarea, input {
+            width: 80%;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: black;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            background-color: black;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Share Tech Mono', monospace;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #00ff00;
+            color: black;
+            font-weight: bold;
+        }
+
+        .output {
+            font-weight: bold;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-size: 1.2em;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .matrix-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .matrix-animation canvas {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <h1>Kryptera & Dekryptera Text</h1>
+
+    <h1>🟢 MATRIX KRYPTONET 🔥</h1>
     
     <textarea id="inputText" placeholder="Skriv ditt meddelande här..."></textarea><br>
     
@@ -23,6 +84,10 @@
     <textarea id="keyText" placeholder="Här visas nyckeln..." readonly></textarea>
     
     <p class="output" id="outputText"></p>
+
+    <div class="matrix-animation">
+        <canvas id="matrixCanvas"></canvas>
+    </div>
 
     <script>
         function scramble(text) {
@@ -69,6 +134,42 @@
                 document.getElementById("outputText").innerText = "Felaktig nyckel eller krypterad text.";
             }
         }
+
+        // MATRIX RAIN-EFFEKT 🎥🌧
+        const canvas = document.getElementById("matrixCanvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrixRain() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#00ff00";
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters[Math.floor(Math.random() * characters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrixRain, 50);
+
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
     </script>
+
 </body>
 </html>
