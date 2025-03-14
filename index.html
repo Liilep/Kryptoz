@@ -14,14 +14,19 @@
 <body>
     <h1>Kryptera & Dekryptera Text</h1>
     
+    <h3>Text att kryptera:</h3>
     <textarea id="inputText" placeholder="Skriv ditt meddelande här..."></textarea><br>
     
     <button onclick="encryptText()">Kryptera</button>
     <button onclick="decryptText()">Dekryptera</button>
-    
-    <h3>Krypterad Nyckel:</h3>
+
+    <h3>Krypterad Text:</h3>
+    <textarea id="encryptedText" placeholder="Här visas krypterad text..." readonly></textarea>
+
+    <h3>Krypteringsnyckel:</h3>
     <textarea id="keyText" placeholder="Här visas nyckeln..." readonly></textarea>
     
+    <h3>Resultat:</h3>
     <p class="output" id="outputText"></p>
 
     <script>
@@ -32,6 +37,7 @@
         }
 
         function unscramble(text, key) {
+            if (!text || !key || text.length !== key.length) return null;
             let original = new Array(text.length);
             key.forEach((originalIndex, scrambledIndex) => {
                 original[originalIndex] = text[scrambledIndex];
@@ -41,21 +47,37 @@
 
         function encryptText() {
             let input = document.getElementById("inputText").value;
+            if (!input) {
+                alert("Skriv in text att kryptera!");
+                return;
+            }
+
             let { scrambled, key } = scramble(input);
-            document.getElementById("outputText").innerText = `Krypterat: ${scrambled}`;
+            document.getElementById("encryptedText").value = scrambled;
             document.getElementById("keyText").value = JSON.stringify(key);
+            document.getElementById("outputText").innerText = "Texten är nu krypterad!";
         }
 
         function decryptText() {
-            let input = document.getElementById("inputText").value;
+            let input = document.getElementById("encryptedText").value;
             let keyInput = document.getElementById("keyText").value;
+
+            if (!input || !keyInput) {
+                alert("Fyll i både krypterad text och nyckel!");
+                return;
+            }
 
             try {
                 let key = JSON.parse(keyInput);
                 let decrypted = unscramble(input, key);
-                document.getElementById("outputText").innerText = `Dekrypterat: ${decrypted}`;
+
+                if (decrypted) {
+                    document.getElementById("outputText").innerText = `Dekrypterat: ${decrypted}`;
+                } else {
+                    document.getElementById("outputText").innerText = "Felaktig nyckel eller krypterad text.";
+                }
             } catch (e) {
-                document.getElementById("outputText").innerText = "Felaktig nyckel eller krypterad text.";
+                document.getElementById("outputText").innerText = "Felaktig nyckel!";
             }
         }
     </script>
