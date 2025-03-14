@@ -5,14 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kryptera & Dekryptera Text</title>
     <style>
-        body { background-color: black; color: green; font-family: 'Courier New', monospace; text-align: center; padding: 20px; }
-        textarea, input { width: 80%; margin: 10px 0; padding: 10px; background: black; color: green; border: 1px solid green; }
-        button { padding: 10px 20px; margin: 10px; cursor: pointer; background: black; color: green; border: 1px solid green; }
-        .output { font-weight: bold; margin-top: 10px; white-space: pre-wrap; }
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+        
+        body {
+            background-color: black;
+            color: #00ff00;
+            font-family: 'Share Tech Mono', monospace;
+            text-align: center;
+            padding: 20px;
+        }
+
+        textarea, input {
+            width: 80%;
+            margin: 10px 0;
+            padding: 10px;
+            background: black;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            background: black;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            font-family: 'Share Tech Mono', monospace;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #00ff00;
+            color: black;
+        }
+
+        .output {
+            font-weight: bold;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-size: 1.2em;
+        }
+
+        h1, h3 {
+            text-shadow: 0 0 5px #00ff00;
+        }
+
+        @keyframes hacker-glow {
+            0% { text-shadow: 0 0 5px #00ff00; }
+            50% { text-shadow: 0 0 15px #00ff00; }
+            100% { text-shadow: 0 0 5px #00ff00; }
+        }
+
+        .hacker-text {
+            animation: hacker-glow 1.5s infinite alternate;
+        }
     </style>
 </head>
 <body>
-    <h1>💻 Kryptera & Dekryptera Text 💻</h1>
+    <h1 class="hacker-text">💻 KRYPTEX: Kryptera & Dekryptera Text 💻</h1>
     
     <textarea id="inputText" placeholder="Skriv ditt meddelande här..."></textarea><br>
     
@@ -20,7 +72,7 @@
     <button onclick="decryptText()">Dekryptera</button>
     <button onclick="copyToClipboard()">📋 Kopiera krypterat meddelande & kod</button>
     
-    <h3>🔑 Krypterad Nyckel:</h3>
+    <h3 class="hacker-text">🔑 Krypterad Nyckel:</h3>
     <textarea id="keyText" placeholder="Klistra in nyckeln här..."></textarea>
     
     <p class="output" id="outputText"></p>
